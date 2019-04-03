@@ -1,0 +1,14 @@
+---
+title: "STAT428_final project_proposal"
+author: "Group6"
+date: "2019/4/3"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## This is the proposal
+
+Checked if everyone could see this file in bitbucket
