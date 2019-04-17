@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - Group members:
   1. Zepeng Xiao, zepengx2
   1. Shuogong, shuog2
-  1. Xiaopin Hua, xh3
+  1. Xiaoping Hua, xh3
   1. Dongfan Li, dongfan2
   1. Sixin Ma, sixinma2
 
