@@ -1,0 +1,69 @@
+---
+title: "process data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+standing_data=read.csv("2017-18_standings.csv")
+match_data=read.csv("2017-18_teamBoxScore.csv")
+```
+```{r}
+str(standing_data)
+str(match_data)
+```
+```{r}
+
+creattablea = function(standing,match,today){
+  standing=standing_data[standing_data$stDate==today,]
+  match=match[as.Date(as.character(match$gmDate), format="%Y-%m-%d")-
+                  as.Date(as.character(today), format="%Y-%m-%d")<=0,]
+  teamname=standing$teamAbbr
+  confname=rep("",30)
+  for(i in 1:30){
+    confname[i]=as.character(match[head(which(match$teamAbbr==teamname[i]),n=1),]$teamConf)
+  }
+  homerate=standing$homeWin/(standing$homeLoss+standing$homeWin)
+  awayrate=standing$awayWin/(standing$awayLoss+standing$awayWin)
+  last10=standing$lastTen/10
+  homescorewin=numeric(30)
+  awayscorewin=numeric(30)
+  homescorelost=numeric(30)
+  awayscorelost=numeric(30)
+  for(i in 1:30){
+    tempmatch=match[match$teamAbbr==teamname[i],]
+    homescorewin[i]=mean(tempmatch[tempmatch$teamLoc=="Home",]$teamPTS)
+    awayscorewin[i]=mean(tempmatch[tempmatch$teamLoc=="Away",]$teamPTS)
+    homescorelost[i]=mean(tempmatch[tempmatch$teamLoc=="Home",]$opptPTS)
+    awayscorelost[i]=mean(tempmatch[tempmatch$teamLoc=="Away",]$opptPTS)
+  }
+  lastgame = match$teamLoc[1:30]#home or away
+  numberdayoff=numeric(30)
+  for(i in 1:30){
+    tempmatch=match[match$teamAbbr==teamname[i],]
+    tempid=max(which(as.Date(as.character(tempmatch$gmDate), format="%Y-%m-%d")-
+                  as.Date(as.character(today), format="%Y-%m-%d")<0))
+    lastgame[i] = tempmatch[tempid,]$teamLoc
+    
+    lastgamedate = tempmatch[tempid,]$gmDate
+    numberdayoff[i] = abs(as.Date(as.character(lastgamedate), format="%Y-%m-%d")-
+                  as.Date(as.character(today), format="%Y-%m-%d"))
+    
+  } 
+  lastgame=as.character( lastgame)
+  totalmatch=standing$gamePlay
+  confmatch=standing$confWin+standing$confLoss
+  confrate=standing$confWin/confmatch
+  teamname=as.character(teamname)
+  #rbind(teamname,confname,homerate,awayrate,last10,homescorewin,homescorelost,awayscorewin,awayscorelost,confrate,numberdayoff,lastgame,totalmatch,confmatch)
+  toreturn=data.frame(teamname,confname,homerate,awayrate,last10,homescorewin,homescorelost,awayscorewin,awayscorelost,confrate,numberdayoff,lastgame,totalmatch,confmatch)
+  toreturn
+  #tablea=data.frame()
+}
+
+tablea180331=creattablea(standing_data,match_data,"2018-03-31")
+tablea180331
+```
