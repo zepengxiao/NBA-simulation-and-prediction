@@ -27,7 +27,9 @@ creattablea = function(standing,match,today){
     confname[i]=as.character(match[head(which(match$teamAbbr==teamname[i]),n=1),]$teamConf)
   }
   homerate=standing$homeWin/(standing$homeLoss+standing$homeWin)
+  homematch=(standing$homeLoss+standing$homeWin)
   awayrate=standing$awayWin/(standing$awayLoss+standing$awayWin)
+  awaymatch=(standing$awayLoss+standing$awayWin)
   last10=standing$lastTen/10
   homescorewin=numeric(30)
   awayscorewin=numeric(30)
@@ -42,6 +44,9 @@ creattablea = function(standing,match,today){
   }
   lastgame = match$teamLoc[1:30]#home or away
   numberdayoff=numeric(30)
+  for(j in 1:10){
+      assign(paste0("l", j), numeric(30))
+    }
   for(i in 1:30){
     tempmatch=match[match$teamAbbr==teamname[i],]
     tempid=max(which(as.Date(as.character(tempmatch$gmDate), format="%Y-%m-%d")-
@@ -52,6 +57,18 @@ creattablea = function(standing,match,today){
     numberdayoff[i] = abs(as.Date(as.character(lastgamedate), format="%Y-%m-%d")-
                   as.Date(as.character(today), format="%Y-%m-%d"))
     
+    last10match=rev(tail(tempmatch$teamRslt, 10))
+    l1[i]=last10match[1]
+    l2[i]=last10match[2]
+    l3[i]=last10match[3]
+    l4[i]=last10match[4]
+    l5[i]=last10match[5]
+    l6[i]=last10match[6]
+    l7[i]=last10match[7]
+    l8[i]=last10match[8]
+    l9[i]=last10match[9]
+    l10[i]=last10match[10]
+    
   } 
   lastgame=as.character( lastgame)
   totalmatch=standing$gamePlay
@@ -59,11 +76,14 @@ creattablea = function(standing,match,today){
   confrate=standing$confWin/confmatch
   teamname=as.character(teamname)
   #rbind(teamname,confname,homerate,awayrate,last10,homescorewin,homescorelost,awayscorewin,awayscorelost,confrate,numberdayoff,lastgame,totalmatch,confmatch)
-  toreturn=data.frame(teamname,confname,homerate,awayrate,last10,homescorewin,homescorelost,awayscorewin,awayscorelost,confrate,numberdayoff,lastgame,totalmatch,confmatch)
+  toreturn=data.frame(teamname,confname,homerate,awayrate,last10,homescorewin,homescorelost,awayscorewin,awayscorelost,confrate,numberdayoff,lastgame,totalmatch,confmatch,homematch, awaymatch, l1,l2,l3,l4,l5,l6,l7,l8,l9,l10)# homematch awaymatch last10result
   toreturn
   #tablea=data.frame()
 }
 
-tablea180331=creattablea(standing_data,match_data,"2018-03-31")
-tablea180331
+tablea180311=creattablea(standing_data,match_data,"2018-03-11")
+str(tablea180311)
+names(tablea180311)
+write.csv(tablea180311,"table_a.csv")
+tablea180311$l1
 ```
