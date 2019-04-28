@@ -1,3 +1,4 @@
+data_boxscore = data_boxscore[data_boxscore$teamLoc == "Home",]
 endMatch = max(which(data_boxscore$gmDate == "2018-04-11"))
 startMatch = min(which(data_boxscore$gmDate == "2018-03-11"))
 data_B = as.data.frame(matrix(NA, (endMatch - startMatch + 1), 32))
