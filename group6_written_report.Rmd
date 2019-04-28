@@ -1,0 +1,33 @@
+---
+title: 'STAT 428 Group 6 Written Report'
+subtitle: 'Simulating NBA Match Results and Predicting
+  NBA Playoff Teams'
+abstract: |
+          | The main purpose of our project is simulating match results and predicting 
+          | NBA playoff teams for season 2017-18 based on this season's real data, and
+          | comparing our results with this season's real data to calculate our method's
+          | accuracy.
+author:
+  - Zepeng Xiao, zepengx2
+  - Shuogong, shuog2
+  - Xiaoping Hua, xh3
+  - Dongfan Li, dongfan2
+  - Sixin Ma, sixinma2
+date: "April 28, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+## Methods
+
+## Results
+
+## Discussion
+
+## Appendix
+Code, visualization, etc..
