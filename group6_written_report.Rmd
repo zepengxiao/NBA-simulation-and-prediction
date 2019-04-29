@@ -21,13 +21,136 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Introduction
+# Introduction
 
-## Methods
+# Methods
 
-## Results
+## Linear Regression
 
-## Discussion
+## Permutation Test
 
-## Appendix
-Code, visualization, etc..
+The linear model we used to predict the game result includes predictors that might be correlated to each other. For example, `homeTeamRate` and `homeTeamlast10` seem to be positively correlated in common sense. Therefore, to improve our regression fit, we want to thorougly examine the correlations among the variables and proceed to use ridge regression if the variables are confirmed to be correlated. The variables for testing are,
+
+- `homeTeamRate`
+- `awayTeamRate`
+- `homeTeamlast10`
+- `awayTeamlast10`
+- `histRate`
+
+A permutation test essentially checks if X and Y have the same distribution by doing the following procedure,
+
+1. Observe a test statistic for the null hypothesis, $H_0$
+2. For each replicated $b = 1, 2,..., B$:
+    - Generate a random permutation $\pi$
+    - Generate a new test statistic from the random permutation
+3. Get a Monte Carlo estimate of the p-value by calculating the probability of obtaining a new test statistic that is more extreme than the observed test statistic in the $B$ replicates
+4. Reject $H_0$ at a significance level $\alpha$ if the p-value is less than $\alpha$.
+
+In our case, we can inherit the idea of permutation test and adapt it to paired data to check the correlation in between. If there is truly no association between X and Y, the distribution of $(X_i, Y_{\pi(i)})$ will be the same as that of $(X_i, Y_i)$, where $\pi(i)$ is the $i$-th element of a permutation $\pi$ of ${1, 2, ..., 13}$. We implement this idea by randomly permuting Y and pairing it with a fixed X and get a p-value for testing $H_0: \rho = 0$ versus $H_1: \rho \neq 0$, where $\rho$ is either the Pearson correlation coefficient or the Spearman correlation coefficient:
+
+- The *Pearson Method* evaluates the **linear** relationship between two continuous variables, where a change in one variable is associated with a **proportional** change in the other variable. 
+
+- The *Spearman Method* is based on the ranked values for each variable rather than the raw data. It evaluates the **monotonic** relationship between two continuous or ordinal variables, where the variables tend to change together, but not necessarily at a constant rate. It is more general than the Pearson method. 
+
+To determine which correlation coefficient to use for which pair of comparison, we plot variables against each another and added some noise using `jitter()` to visualize the trend of relationship and decide which method to use.
+
+According to the plots, *Home Rate vs. Home Last 10*, *Away Rate vs. Away Last 10*, *Home Last 10 vs. Historical Rate*, and *Away Last 10 vs. Historical Rate* appear to be linear. We use the Pearson method for these pairs. For the rest pairs, trends are not that obvious. Therefore, we use the more genearl Spearman method.
+
+## Ridge Regression 
+
+
+# Results
+
+## Linear Regrssion 
+
+## Permutation Test
+
+By performing permutation tests, we obtained the following table, which shows all the pairs we tested, the method we used, the p-value for the permutation test, and the decisions based on the p-values. 
+
+| Pairs                            | Method   | p-value    | Decision       |
+|----------------------------------|----------|------------|----------------|
+| Home Rate vs. Home Last 10       | Pearson  | 9.999e-05  | Correlated     |
+| Away Rate vs. Away Last 10       | Pearson  | 9.999e-05  | Correlated     |
+| Home Rate vs. Historical Rate    | Spearman | 9.999e-05  | Correlated     |
+| Away Rate vs. Historical Rate    | Spearman | 9.999e-05  | Correlated     |
+| Home Last 10 vs. Historical Rate | Pearson  | 9.999e-05  | Correlated     |
+| Away Last 10 vs. Historical Rate | Pearson  | 9.999e-05  | Correlated     |
+| Home Rate vs. Away Rate          | Spearman | 0.4131587  | Not Correlated |
+| Home Last 10 vs. Away Last 10    | Spearman | 9.999e-05  | Correlated     |
+| Home Rate vs. Away Last 10       | Spearman | 0.02689731 | Correlated     |
+| Away Rate vs. Home Last 10       | Spearman | 0.02329767 | Correlated     |
+
+We found that all pairs of variables have correlation except *Home Rate vs. Away Rate*. This observation suggests that there exists problem of collinearity among the predictors. It leads us to further examine the VIF (Variance Inflation Factor) of the predictors and fit a Ridge Regression model to remedy the problem of collinearity. 
+
+## Ridge Regression 
+
+# Discussion
+The test for correlation is not very accurate because the "Last 10" data (i.e. `homeTeamlast10` and `awayTeamlast10`) are highly categorical (discrete) because based on their calculation criteria: the number of times the team wins, which is an integer, divided by 10. When the "Last 10" data is paired with the other continuous variables, such as `homeTeamRate` and `histRate`, the correlation between a continuous variable and a somewhat discrete variable cannot be simply determined by correlation coefficients.
+
+
+<!-- Force a new page for appendix -->
+\newpage
+
+# Appendix
+
+### Scatterplots for Correlation
+
+```{r, echo = FALSE}
+data = read.csv("data_fit.csv")
+
+par(mfrow = c(2,2))
+plot(data$homeTeamRate, jitter(data$homeTeamlast10, 3), main = "Home Rate vs. Home Last 10")
+plot(data$awayTeamRate, jitter(data$awayTeamlast10, 3), main = "Away Rate vs. Away Last 10")
+plot(data$homeTeamRate, data$histRate, main = "Home Rate vs. Historical Rate")
+plot(data$awayTeamRate, data$histRate, main = "Away Rate vs. Historical Rate")
+par(mfrow = c(2,2))
+plot(jitter(data$homeTeamlast10, 3), data$histRate, main = "Home Last 10 vs. Historical Rate")
+plot(jitter(data$awayTeamlast10, 3), data$histRate, main = "Away Last 10 vs. Historical Rate")
+plot(data$homeTeamRate, data$awayTeamRate, main = "Home Rate vs. Away Rate")
+plot(jitter(data$homeTeamlast10, 3), jitter(data$awayTeamlast10, 3), main = "Home Last 10 vs. Away Last 10")
+par(mfrow = c(2,2))
+plot(data$homeTeamRate, jitter(data$awayTeamlast10, 3), main = "Home Rate vs. Away Last 10")
+plot(data$awayTeamRate, jitter(data$homeTeamlast10, 3), main = "Away Rate vs. Home Last 10")
+```
+
+### Permutation Test with either correlation coefficient
+```{r, eval = FALSE, echo = TRUE}
+perm_test = function(X, Y, B = 10000, method = "pearson") {
+  nu = seq_along(X)
+  reps = numeric(B)
+  
+  if (method == "pearson") { # Pearson Method - default
+    rho0 = abs(cor(X, Y))
+    for ( i in 1:B ) {
+      perm = sample(nu, size = length(X), replace = FALSE)
+      X1 = X[perm]
+      reps[i] = abs(cor(X1, Y))
+    }
+    pval = mean(c(rho0, reps) >= rho0)
+  } else if (method == "spearman") { # Spearman Method
+    rho0 = cor(X, Y, method = "spearman")
+    t0 = abs(rho0*sqrt((length(X) - 2)/(1 - rho0^2)))
+    for ( i in 1:B ) {
+      perm = sample(nu, size = length(X), replace = FALSE)
+      X1 = X[perm]
+      rho = cor(X1, Y, method = "spearman")
+      reps[i] = abs(rho*sqrt((length(X) - 2)/(1 - rho^2)))
+    }
+    pval = mean(c(t0, reps) >= t0)
+  }
+  
+  return(pval)
+}
+
+# running the tests
+perm_test(data$homeTeamRate, data$homeTeamlast10, 10000, "pearson")
+perm_test(data$awayTeamRate, data$awayTeamlast10, 10000, "pearson")
+perm_test(data$homeTeamRate, data$histRate, 10000, "spearman")
+perm_test(data$awayTeamRate, data$histRate, 10000, "spearman")
+perm_test(data$homeTeamlast10, data$histRate, 10000, "spearman")
+perm_test(data$awayTeamlast10, data$histRate, 10000, "spearman")
+perm_test(data$homeTeamRate, data$awayTeamRate, 10000, "spearman")
+perm_test(data$homeTeamlast10, data$awayTeamlast10, 10000, "spearman")
+perm_test(data$homeTeamRate, data$awayTeamlast10, 10000, "spearman")
+perm_test(data$awayTeamRate, data$homeTeamlast10, 10000, "spearman")
+```
