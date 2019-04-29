@@ -1,0 +1,74 @@
+library(dplyr)
+
+set.seed(2019)
+data_A =  read.csv(file="/Users/shuogong/Desktop/STAT428/stat428_group6/table_a.csv")
+data_B =  read.csv(file="/Users/shuogong/Desktop/STAT428/stat428_group6/table_B.csv")
+totalNRows = nrow(data_B)
+data_A = data_A[,-1]
+data_B = data_B[,-1]
+
+data_A_copy = data_A
+data_B_copy = data_B
+
+for (nrowdata_B_copy in 1:totalNRows) {
+  data_B_copy[nrowdata_B_copy, ]$`HomeTeam.A.`
+  
+  homeTeam = data_B_copy[nrowdata_B_copy, ]$`HomeTeam.A.`
+  awayTeam = data_B_copy[nrowdata_B_copy, ]$`AwayTeam.B.`
+  
+  homeTeamRow = which(data_A_copy$teamname == homeTeam)
+  awayTeamRow = which(data_A_copy$teamname == awayTeam)
+  
+  homeTeamdata_A_copy = data_A_copy[homeTeamRow, 2:26]
+  awayTeamdata_A_copy = data_A_copy[awayTeamRow, 2:26]
+  
+  data_B_copy[nrowdata_B_copy, ][6:30] = data_A_copy[homeTeamRow, ][2:26]
+  data_B_copy[nrowdata_B_copy, ][31:55] = data_A_copy[awayTeamRow, ][2:26]
+  
+  homeTeamRate = homeTeamdata_A_copy[2][[1]]
+  awayTeamRate = awayTeamdata_A_copy[3][[1]]
+  homeTeamlast10 = homeTeamdata_A_copy[4][[1]]
+  awayTeamlast10 = awayTeamdata_A_copy[4][[1]]
+  histRate = data_B_copy[nrowdata_B_copy, ][5][[1]]
+  
+  predictorDataFrame = data.frame(homeTeamRate = homeTeamRate, awayTeamRate = awayTeamRate, homeTeamlast10 = homeTeamlast10,
+                                  awayTeamlast10 = awayTeamlast10, histRate = histRate)
+  
+  predictStat = predict(glm1, predictorDataFrame)
+  
+  threshold = exp(predictStat) / (1 + exp(predictStat))
+  if (runif(1) < threshold) {
+    result = 1
+  } else {
+    result = 0
+  }
+  
+  data_B_copy[nrowdata_B_copy, ][56] = result
+  
+  homeRate = data_A_copy[homeTeamRow, ][3][[1]]
+  homeMatch = data_A_copy[homeTeamRow, ][15][[1]]
+  homeWinMatch = round(homeRate * homeMatch, digits=0)
+  data_A_copy[homeTeamRow, ][15] = homeMatch + 1
+  data_A_copy[homeTeamRow, ][3] = (homeWinMatch + 1) / (homeMatch + 1)
+  data_A_copy[homeTeamRow, ][18:26] = data_A_copy[homeTeamRow, ][17:25]
+  data_A_copy[homeTeamRow, ][17] = data_B_copy[nrowdata_B_copy, ][56]
+  
+  
+  awayRate = data_A_copy[awayTeamRow, ][4][[1]]
+  awayMatch = data_A_copy[awayTeamRow, ][16][[1]]
+  awayWinMatch = round(awayRate * awayMatch, digits=0)
+  data_A_copy[awayTeamRow, ][16] = awayMatch + 1
+  data_A_copy[awayTeamRow, ][4] = (awayWinMatch + 1) / (awayMatch + 1)
+  data_A_copy[awayTeamRow, ][18:26] = data_A_copy[awayTeamRow, ][17:25]
+  if (data_B_copy[nrowdata_B_copy, ][56] == 0) {
+    data_A_copy[awayTeamRow, ][17] = 1
+  } else {
+    data_A_copy[awayTeamRow, ][17] = 0
+  }
+  
+}
+
+
+
+
+
