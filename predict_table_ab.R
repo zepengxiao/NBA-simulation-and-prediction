@@ -1,20 +1,21 @@
 library(dplyr)
 
-set.seed(2019)
 data_A =  read.csv(file="/Users/shuogong/Desktop/STAT428/stat428_group6/table_a.csv")
 data_B =  read.csv(file="/Users/shuogong/Desktop/STAT428/stat428_group6/table_B.csv")
-totalNRows = nrow(data_B)
 data_A = data_A[,-1]
 data_B = data_B[,-1]
+
+totalNRows = nrow(data_B)
+set.seed(2019)
 
 data_A_copy = data_A
 data_B_copy = data_B
 
 for (nrowdata_B_copy in 1:totalNRows) {
-  data_B_copy[nrowdata_B_copy, ]$`HomeTeam.A.`
+  data_B_copy[nrowdata_B_copy, ]$`HomeTeam(A)`
   
-  homeTeam = data_B_copy[nrowdata_B_copy, ]$`HomeTeam.A.`
-  awayTeam = data_B_copy[nrowdata_B_copy, ]$`AwayTeam.B.`
+  homeTeam = data_B_copy[nrowdata_B_copy, ]$`HomeTeam(A)`
+  awayTeam = data_B_copy[nrowdata_B_copy, ]$`AwayTeam(B)`
   
   homeTeamRow = which(data_A_copy$teamname == homeTeam)
   awayTeamRow = which(data_A_copy$teamname == awayTeam)
@@ -49,23 +50,26 @@ for (nrowdata_B_copy in 1:totalNRows) {
   homeMatch = data_A_copy[homeTeamRow, ][15][[1]]
   homeWinMatch = round(homeRate * homeMatch, digits=0)
   data_A_copy[homeTeamRow, ][15] = homeMatch + 1
-  data_A_copy[homeTeamRow, ][3] = (homeWinMatch + 1) / (homeMatch + 1)
+  data_A_copy[homeTeamRow, ][3] = (homeWinMatch + result) / (homeMatch + 1)
   data_A_copy[homeTeamRow, ][18:26] = data_A_copy[homeTeamRow, ][17:25]
-  data_A_copy[homeTeamRow, ][17] = data_B_copy[nrowdata_B_copy, ][56]
+  data_A_copy[homeTeamRow, ][17] = data_B_copy[nrowdata_B_copy, ][56] + 1
+  data_A_copy$last10[homeTeamRow] = sum(data_A_copy[homeTeamRow, 17:26] - 1) / 10
   
   
   awayRate = data_A_copy[awayTeamRow, ][4][[1]]
   awayMatch = data_A_copy[awayTeamRow, ][16][[1]]
   awayWinMatch = round(awayRate * awayMatch, digits=0)
   data_A_copy[awayTeamRow, ][16] = awayMatch + 1
-  data_A_copy[awayTeamRow, ][4] = (awayWinMatch + 1) / (awayMatch + 1)
+  data_A_copy[awayTeamRow, ][4] = (awayWinMatch + (1 - result)) / (awayMatch + 1)
   data_A_copy[awayTeamRow, ][18:26] = data_A_copy[awayTeamRow, ][17:25]
   if (data_B_copy[nrowdata_B_copy, ][56] == 0) {
-    data_A_copy[awayTeamRow, ][17] = 1
+    data_A_copy[awayTeamRow, ][17] = 2
   } else {
-    data_A_copy[awayTeamRow, ][17] = 0
+    data_A_copy[awayTeamRow, ][17] = 1
   }
-  
+  data_A_copy$last10[awayTeamRow] = sum(data_A_copy[awayTeamRow, 17:26] - 1) / 10
+  data_A_copy$totalmatch[homeTeamRow] = data_A_copy$totalmatch[homeTeamRow] + 1
+  data_A_copy$totalmatch[awayTeamRow] = data_A_copy$totalmatch[awayTeamRow] + 1
 }
 
 

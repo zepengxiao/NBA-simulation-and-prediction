@@ -1,6 +1,6 @@
 data_boxscore = data_boxscore[data_boxscore$teamLoc == "Home",]
 endMatch = max(which(data_boxscore$gmDate == "2018-04-11"))
-startMatch = min(which(data_boxscore$gmDate == "2018-03-11"))
+startMatch = min(which(data_boxscore$gmDate == "2018-03-12"))
 data_B = as.data.frame(matrix(NA, (endMatch - startMatch + 1), 56))
 colnames(data_B) = c("gmDate", "HomeTeam(A)", "AwayTeam(B)", "SameConf", "HistData", 
                     "confname_A", "homerate_A", "awayrate_A", "last10_A", "homescorewin_A", "homescorelost_A", "awayscorewin_A", "awayscorelost_A",  "confrate_A", "numberdayoff_A", "lastgame_A", "totalmatch_A", "confmatch_A",
