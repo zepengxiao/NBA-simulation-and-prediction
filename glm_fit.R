@@ -1,5 +1,5 @@
 startMatchfit = min(which(data_boxscore$gmDate == "2017-12-01"))
-endMatchfit = max(which(data_boxscore$gmDate == "2018-03-10"))
+endMatchfit = max(which(data_boxscore$gmDate == "2018-03-11"))
 
 data_fit = as.data.frame(matrix(NA, endMatchfit - startMatchfit + 1, 9))
 data_fit[,1] = data_boxscore$gmDate[startMatchfit:endMatchfit]
