@@ -23,6 +23,25 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
+![XijuedibanTAT](images-na.ssl-images-amazon.com/images/I/51%2B3hvIouoL.jpg)
+
+The National Basketball Association (NBA) is one of the most worldwide popular sporting events that is held every year in the world. 
+*It has two conferences, East and West, with 15 teams in each division. 
+*30 teams fight in the league fight for a champion in a year-long season from October to June every year. 
+*Each season is split into regular season and playoffs. 
+*Each team has 82 matches to play in their regular season 
+*Teams in the same conference would play more often than those.
+*Only the top 8 teams in each division are able to enter the playoffs of the season. 
+*Ranks are determined ascending by a special statistic called Games Behind:
+  +When team a is the leading team of the conference.
+\[Team B’s games behind=\frac {(Team A’s Wins-Team A’s Losses)-(Team B’s Wins-Team B’s Losses)}{2}\]
+Thus which 16 teams would enter the playoffs every season is one of the biggest mystery in NBA every season.
+
+Our goal, as introduced above, is simulating match results and predicting NBA playoff teams. In other words, we are going to predict which eight teams in each conference would get the lowest games behind by the end of the regular season. 
+
+We are focusing on the data of the past 17-18 season. We will try to predict based on prior part of this season’s real data, and comparing our results with this season’s real data in the rest season to calculate our method’s accuracy. If we found our prediction is reliable in this season, we have prepared data in the past 10 years for test and verification.
+
+
 # Methods
 
 ## Generalized Linear Regression
