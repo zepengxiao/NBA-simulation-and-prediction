@@ -25,7 +25,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Methods
 
-## Linear Regression
+## Generalized Linear Regression
 
 ## Permutation Test
 
