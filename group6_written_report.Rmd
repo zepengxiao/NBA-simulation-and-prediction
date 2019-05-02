@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Abstract 
 
-The main purpose of our project is simulating match results and predicting NBA playoff teams for season 2017-18 based on this season's real data, and comparing our results with this season's real data to calculate our method's accuracy.
+The main purpose of our project is simulating match results and predicting NBA playoff teams for season 2017-18 based on this season's real data, and comparing our results with this season's real data to calculate our method's accuracy. The method we used in our project includes **Random number generations**, **Permutation test** and **Ridge regression**. We found that the accuracy of our prediction of playoff teams for season 2017-18 is $87.5%(14/16)$ when comapring the actual result.
 
 # Introduction
 
