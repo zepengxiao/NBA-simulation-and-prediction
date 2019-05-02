@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2019.1.30)  2 MAY 2019 20:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2019.1.30)  2 MAY 2019 20:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -838,7 +838,8 @@ Package: titling 2009/09/04 v2.1d maketitle typesetting
 \thanksmarkwidth=\skip53
 \thanksmargin=\skip54
 \droptitle=\skip55
-) (./group6_written_report.aux)
+)
+No file group6_written_report.aux.
 \openout1 = `group6_written_report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 129.
@@ -928,7 +929,6 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 129.
 LaTeX Info: Redefining \pageref on input line 129.
 LaTeX Info: Redefining \nameref on input line 129.
-(./group6_written_report.out) (./group6_written_report.out)
 \@outlinefile=\write4
 \openout4 = `group6_written_report.out'.
 
@@ -997,7 +997,7 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 146.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-) <eastandwest.jpg, id=73, 299.1175pt x 451.6875pt>
+) <eastandwest.jpg, id=13, 299.1175pt x 451.6875pt>
 File: eastandwest.jpg Graphic file (type jpg)
 <use eastandwest.jpg>
 Package pdftex.def Info: eastandwest.jpg used on input line 155.
@@ -1028,115 +1028,22 @@ Overfull \hbox (20.28117pt too wide) detected at line 184
  []
 
 [2 <./eastandwest.jpg>]
-LaTeX Font Info:    Try loading font information for T1+lmtt on input line 215.
 
-(/usr/share/texmf/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 216.
-LaTeX Font Info:    Try loading font information for TS1+lmtt on input line 232
-.
-(/usr/share/texmf/tex/latex/lm/ts1lmtt.fd
-File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 232--232
-[]\T1/lmtt/m/n/10 ##  $ stDate  : Factor w/ 168 levels "2017-10-17","2017-10-18
-",..: 1 1 1 1 1 1 1 1 1 1 ...[] 
- []
+! LaTeX Error: File `methods_flowchart' not found.
 
-
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 251--251
-[]\T1/lmtt/m/n/10 ##  $ gmDate  : Factor w/ 168 levels "2017-10-17","2017-10-18
-",..: 1 1 1 1 2 2 2 2 2 2 ...[] 
- []
-
-[3] [4] [5] [6]
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 496.
-
-
-<group6_written_report_files/figure-latex/unnamed-chunk-7-1.pdf, id=124, 445.66
-5pt x 306.14375pt>
-File: group6_written_report_files/figure-latex/unnamed-chunk-7-1.pdf Graphic fi
-le (type pdf)
-<use group6_written_report_files/figure-latex/unnamed-chunk-7-1.pdf>
-Package pdftex.def Info: group6_written_report_files/figure-latex/unnamed-chunk
--7-1.pdf used on input line 498.
-(pdftex.def)             Requested size: 445.6707pt x 306.14766pt.
-
-<group6_written_report_files/figure-latex/unnamed-chunk-7-2.pdf, id=125, 452.69
-125pt x 293.095pt>
-File: group6_written_report_files/figure-latex/unnamed-chunk-7-2.pdf Graphic fi
-le (type pdf)
-<use group6_written_report_files/figure-latex/unnamed-chunk-7-2.pdf>
-Package pdftex.def Info: group6_written_report_files/figure-latex/unnamed-chunk
--7-2.pdf used on input line 499.
-(pdftex.def)             Requested size: 452.69014pt x 293.09427pt.
-
-<group6_written_report_files/figure-latex/unnamed-chunk-7-3.pdf, id=126, 442.65
-375pt x 143.53625pt>
-File: group6_written_report_files/figure-latex/unnamed-chunk-7-3.pdf Graphic fi
-le (type pdf)
-<use group6_written_report_files/figure-latex/unnamed-chunk-7-3.pdf>
-Package pdftex.def Info: group6_written_report_files/figure-latex/unnamed-chunk
--7-3.pdf used on input line 500.
-(pdftex.def)             Requested size: 442.66615pt x 143.54027pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 498--501
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 498--501
-[]
- []
-
-[7]
-Overfull \vbox (3.11723pt too high) has occurred while \output is active []
-
-[8 <./group6_written_report_files/figure-latex/unnamed-chunk-7-1.pdf> <./group6
-_written_report_files/figure-latex/unnamed-chunk-7-2.pdf>]
-Overfull \vbox (2.03923pt too high) detected at line 547
- []
-
-[9 <./group6_written_report_files/figure-latex/unnamed-chunk-7-3.pdf>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 550.
-[10]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 550.
-(./group6_written_report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 550.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 550.
-Package rerunfilecheck Info: File `group6_written_report.out' has not changed.
-(rerunfilecheck)             Checksum: 6701D1BFCDAE90A336BED803BBE3868E;2089.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 550.
- ) 
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.215 ...enter}\includegraphics{methods_flowchart}
+                                                   \end{center} 
 Here is how much of TeX's memory you used:
- 13042 strings out of 494944
- 188814 string characters out of 6180677
- 292180 words of memory out of 5000000
- 16039 multiletter control sequences out of 15000+600000
- 53391 words of font info for 74 fonts, out of 8000000 for 9000
+ 12838 strings out of 494944
+ 185327 string characters out of 6180677
+ 285331 words of memory out of 5000000
+ 15917 multiletter control sequences out of 15000+600000
+ 46730 words of font info for 57 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 31i,5n,35p,398b,451s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share
-/texmf/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ma
-thsy.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/f
-onts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.
-pfb></usr/share/texmf/fonts/type1/public/lm/lmmi7.pfb></usr/share/texmf/fonts/t
-ype1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></us
-r/share/texmf/fonts/type1/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/pub
-lic/lm/lmr7.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/
-texmf/fonts/type1/public/lm/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/
-lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy7.pfb></usr/share/texmf/
-fonts/type1/public/lm/lmtk10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10
-.pfb></usr/share/texmf/fonts/type1/public/lm/lmtti10.pfb>
-Output written on group6_written_report.pdf (10 pages, 728451 bytes).
-PDF statistics:
- 243 PDF objects out of 1000 (max. 8388607)
- 203 compressed objects within 3 object streams
- 46 named destinations out of 1000 (max. 500000)
- 10381 words of extra memory for PDF output out of 12000 (max. 10000000)
+ 31i,5n,35p,246b,337s stack positions out of 5000i,500n,10000p,200000b,80000s
 
+!  ==> Fatal error occurred, no output PDF file produced!
