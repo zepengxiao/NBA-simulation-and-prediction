@@ -1,6 +1,6 @@
 ---
 title: |
-  | \vspace{7cm} \LARGE{STAT428 Group6 Project Written Report}
+  | \vspace{5cm} \LARGE{STAT428 Group6 Project Written Report}
 author:
 - Zepeng Xiao, zepengx2
 - Shuogong, shuog2
@@ -16,13 +16,13 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+\centerline{**Abstract**} 
+
+\quad The main purpose of our project is simulating match results and predicting NBA playoff teams for season 2017-18 based on this season's real data, and comparing our results with this season's real data to calculate our method's accuracy, since analyzing and predictiong NBA stats is popular currently. The method we used in our project includes **Random number generations**, **Permutation test** and **Ridge regression**. 
+
+\quad We found that regarding the playoff teams for season 2017-18, the accuracy of our prediction is $87.5 \% \ (14/16)$ when comapring the actual result. The result can be regarded as accurate beacuse we used each team's former performance in this season to make predictions, which is reliable. But there are still some conditions that were not included in the model, like player's injury, team's stamina and so on.
+
 \pagebreak
-
-# Abstract 
-
-The main purpose of our project is simulating match results and predicting NBA playoff teams for season 2017-18 based on this season's real data, and comparing our results with this season's real data to calculate our method's accuracy, since analyzing and predictiong NBA stats is popular currently. The method we used in our project includes **Random number generations**, **Permutation test** and **Ridge regression**. 
-
-We found that regarding the playoff teams for season 2017-18, the accuracy of our prediction is $87.5 \% \ (14/16)$ when comapring the actual result. The result can be regarded as accurate beacuse we used each team's former performance in this season to make predictions, which is reliable. But there are still some conditions that were not included in the model, like player's injury, team's stamina and so on.
 
 # Introduction
 
@@ -49,7 +49,6 @@ Thus which 16 teams would enter the playoffs every season is one of the biggest 
 Our goal, as introduced above, is simulating match results and predicting NBA playoff teams. In other words, we are going to predict which eight teams in each conference would get the lowest games behind by the end of the regular season. 
 
 The focus is on the past 17-18 season. We will try to predict based on prior part of this season’s real data, and comparing our results with this season’s real data in the rest season to calculate our method’s accuracy. If we found our prediction is reliable in this season, we have prepared data in the past 10 years for test and verification.
-
 
 # Methods
 
@@ -126,7 +125,15 @@ data_fit[,9] = data_boxscore$teamRslt[startMatchfit:endMatchfit]
 glm1 = glm(Result ~ homeTeamRate + awayTeamRate + homeTeamlast10 + awayTeamlast10 + histRate, family = binomial, data = data_fit)
 ```
 
-In our project, we used actual match result from *2017-12-01* to *2018-03-11* to fit a model, and used this model to predict match result from *2018-03-12* to the end of NBA 2017-18 regular season. 
+In our project, we used actual match result from *2017-12-01* to *2018-03-11* to fit a model, and used this model to predict match result from *2018-03-12* to the end of NBA 2017-18 regular season since:
+- At the beginning of the semester, each team's winning rate changed rapidly since the number of game played is small, which may be outliers for our fitted model.
+- We can make more reliable prediction if we use the data in the same season.
+
+The fitted data is showed below:
+```{r, echo = FALSE}
+head(data_fit, 3)
+```
+
 
 ### Processing table_a and table_b
 
@@ -265,7 +272,11 @@ Columns’ meaning:
 
 ## Generalized Linear Regression
 
-Since each 
+NBA is the place "where amazing happens", so instead of directly predicting match results by our model, we decided to predict the win probability for home team in each team and make simulation to take "amazing things" into consideration.
+
+Therefore, we treated the match result between home team A and away team B as a bernoulli distribution with probability $P(Y_{AB} | X_{AB})$, where the win probability of home team A is $P(Y_{AB} | X_{AB})$ and the win probability for away team B is ($1 - P(Y_{AB} | X_{AB})$).
+
+We use `glm()` function as our 
 
 ## Permutation Test
 
