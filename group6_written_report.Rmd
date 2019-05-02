@@ -55,9 +55,14 @@ The focus is on the past 17-18 season. We will try to predict based on prior par
 
 ## Processing Data
 
-Data generation
-head(Table A)
-Mid season raw data——> Initial table A——> Table B——> Table A 
+We made two tables A and B to store the standing data of all teams (in A) and the match data of each matches (in B). 
+
+Then use the "current" standing data in A to simulate upcoming matches in B and use the following match data to regenerate new standing data in A
+
+```{r, fig.align="center",echo=FALSE}
+knitr::include_graphics("methods_flowchart.png")
+```
+
 Raw data used:
 ```{r,echo=FALSE}
 standing_data=read.csv("2017-18_standings.csv")
@@ -168,11 +173,11 @@ Columns’ meaning:
 
 The generalized linear model we used to predict the game result includes predictors that might be correlated to each other. For example, `homeTeamRate` and `homeTeamlast10` seem to be positively correlated in common sense. Therefore, to improve our regression fit, we want to thorougly examine the correlations among the variables and proceed to use ridge regression if the variables are confirmed to be correlated. The variables for testing are,
 
-- `homeTeamRate`
-- `awayTeamRate`
-- `homeTeamlast10`
-- `awayTeamlast10`
-- `histRate`
+* homeTeamRate
+* awayTeamRate
+* homeTeamlast10
+* awayTeamlast10
+* histRate
 
 A permutation test essentially checks if X and Y have the same distribution by doing the following procedure,
 
