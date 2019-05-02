@@ -278,6 +278,19 @@ Therefore, we treated the match result between home team A and away team B as a 
 
 We use `glm()` function as our 
 
+## Simulation Process
+
+We simulate the match results and predict playoff teams for 1000 times, using the ridge regression model above. Given table A and table B data, we could write our simulation process algorithm as below:
+
+1. Create two $1000\times8$ empty data frame, `sim_record_East` and `sim_record_West` to store top 8 eastern team and western team names for 1000 simulations. Also, create a $30\times10$ data frame `sim_record_number`, whose column names are `"teamname", "confname", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"`, to accumulately record how many times each team enters the top 8 after 1000 simulations. And columns from `1st` to `8th` are all initialized with zeros.
+2. For each game match (each row is one game match) in table B:
+    - Update standing data (columns from `confname_A` to `l10_B` in game match row) from the corresponding rows in table A.
+    - Use updated game match data and our ridge regression model to predict the home team win probability. Using our ridge regression model, we could get  `predictStat`, and `threshold = exp(predictStat) / (1 + exp(predictStat))`. Then randomly generate one number from `runif(1)` and compare it with `threshold`. Home team wins if the number generated is less than `threshold`, and vice versa.
+    - Once we get the predicted match result, we use it to update the corresponding data in table A, including `homerate`, `awayrate`, `last10`, etc.
+3. After predicting all game matches' results, we push the eastern and western top 8 team names into `sim_record_East` and `sim_record_West`, also we add these 16 teams' counters by one in `sim_record_number`. 
+4. Repeat step 2, 3 for 1000 times.
+5. Finally, we could get `sim_record_number` after 1000 times simulation. And for our final prediction, we could count total scores for all teams. Let $$Total\ score = Times\ of\ 1^{st} \times 8+\ times\ of\ 2^{nd} \times 7+...+\ times\ of\ 8^{th} \times 1$$. We could get the rankings in order of total scores from largest to smallest. And the top 8 western and eastern teams are what we finally want.
+
 ## Permutation Test
 
 The generalized linear model we used to predict the game result includes predictors that might be correlated to each other. For example, `homeTeamRate` and `homeTeamlast10` seem to be positively correlated in common sense. Therefore, to improve our regression fit, we want to thorougly examine the correlations among the variables and proceed to use ridge regression if the variables are confirmed to be correlated. The variables for testing are,
