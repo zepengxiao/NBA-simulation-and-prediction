@@ -16,7 +16,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-\centerline{**Abstract**} 
+\centerline{Abstract} 
 
 \quad The main purpose of our project is simulating match results and predicting NBA playoff teams for season 2017-18 based on this season's real data, and comparing our results with this season's real data to calculate our method's accuracy, since analyzing and predictiong NBA stats is popular currently. The method we used in our project includes **Random number generations**, **Permutation test** and **Ridge regression**. 
 
@@ -126,6 +126,7 @@ glm1 = glm(Result ~ homeTeamRate + awayTeamRate + homeTeamlast10 + awayTeamlast1
 ```
 
 In our project, we used actual match result from *2017-12-01* to *2018-03-11* to fit a model, and used this model to predict match result from *2018-03-12* to the end of NBA 2017-18 regular season since:
+
 - At the beginning of the semester, each team's winning rate changed rapidly since the number of game played is small, which may be outliers for our fitted model.
 - We can make more reliable prediction if we use the data in the same season.
 
@@ -133,7 +134,15 @@ The fitted data is showed below:
 ```{r, echo = FALSE}
 head(data_fit, 3)
 ```
+Some important columns' meaning: 
 
+* "gmDate": Game date
+* "homeTeam" / "awayTeam": The Abbreviation of home team name/away team name
+* "homeTeamRate": The winning rate when home team played at home
+* "awayTeamRate": The winning rate when away team layed away
+* "homeTeamlast10" / "awayTeamlast10": The winning rate of last 10 games for home team/away team
+* "histRata": The historical rate when home team play against away team
+* "Result": The result for the match
 
 ### Processing table_a and table_b
 
@@ -262,7 +271,6 @@ str(data_B[,c(1,2,3,4,5,56)])
 ```
 Columns’ meaning:
 
-* "gmDate": Game date
 * "Hometeam(A)": The Abbreviation of team A (played as home team)
 * "Awayteam(B)": The Abbreviation of team B (played as away team)
 * "SameConf": True if two teams are in the same conference, false if not
@@ -276,7 +284,21 @@ NBA is the place "where amazing happens", so instead of directly predicting matc
 
 Therefore, we treated the match result between home team A and away team B as a bernoulli distribution with probability $P(Y_{AB} | X_{AB})$, where the win probability of home team A is $P(Y_{AB} | X_{AB})$ and the win probability for away team B is ($1 - P(Y_{AB} | X_{AB})$).
 
-We use `glm()` function as our 
+We use `glm()` function to predict our win probability, whose model is: $$P(Y_{AB} | X_{AB}) = \frac{e^{\pi(X_{AB})}}{1 + e^{\pi(X_{AB})}} \ \text{where} \ \pi(X_{AB}) = \beta_0 + \beta_1 x_{AB1} + \ldots + \beta_n x_{ABn}$$
+$x_{AB1}, x_{AB2}, \ldots, x_{ABn}$ are predictor variables related to team A and team B.
+
+When selecting predictors of our models, we think that the most significant factors that may affect match include the short-term performance and long-term performance for both teams in this season, and the historical performance between these two teams. Therefore, our results include predictors `homeTeamRate`, `awayTeamRate`, `homeTeamlast10`, `awayTeamlast10` and `histRate`. (The meaning of each predictors are defined preciously in **Processing Data** part).
+
+The summary is showed below:
+```{r, echo = FALSE}
+summary(glm1)
+glmcoe = glm1$coefficients
+```
+Hence our generalized model is: 
+$$p(Y_{AB}) = \frac{exp^{`r glmcoe[1]` + (`r glmcoe[2]`X_{AB1}) + (`r glmcoe[3]`X_{AB2}) + (`r glmcoe[4]`X_{AB3}) + (`r glmcoe[5]`X_{AB4}) + (`r glmcoe[6]`X_{AB5})}}{1 + exp^{`r glmcoe[1]` + (`r glmcoe[2]`X_{AB1}) + (`r glmcoe[3]`X_{AB2}) + (`r glmcoe[4]`X_{AB3}) + (`r glmcoe[5]`X_{AB4}) + (`r glmcoe[6]`X_{AB5})}}$$
+where $X_{AB1}$ is homeTeamRate, $X_{AB2}$ is awayTeamRate, $X_{AB3}$ is homeTeamlast10, $X_{AB4}$ is awayTeamlast10 and $X_{AB5}$ is histRate.
+
+Though all predictors seem significant($\text{p-value} < 0.05$) in our generalized linear model, we still need to check if collinearity exists between some predictors. So we turn to permutation test for checking.
 
 ## Permutation Test
 
@@ -313,6 +335,9 @@ According to the plots, *Home Rate vs. Home Last 10*, *Away Rate vs. Away Last 1
 # Results
 
 ## Linear Regrssion
+
+
+
 
 ## Permutation Test
 
