@@ -166,11 +166,11 @@ Columns’ meaning:
 
 The generalized linear model we used to predict the game result includes predictors that might be correlated to each other. For example, `homeTeamRate` and `homeTeamlast10` seem to be positively correlated in common sense. Therefore, to improve our regression fit, we want to thorougly examine the correlations among the variables and proceed to use ridge regression if the variables are confirmed to be correlated. The variables for testing are,
 
-- `homeTeamRate`
-- `awayTeamRate`
-- `homeTeamlast10`
-- `awayTeamlast10`
-- `histRate`
+* homeTeamRate
+* awayTeamRate
+* homeTeamlast10
+* awayTeamlast10
+* histRate
 
 A permutation test essentially checks if X and Y have the same distribution by doing the following procedure,
 
