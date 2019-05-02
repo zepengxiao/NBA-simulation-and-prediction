@@ -55,15 +55,9 @@ The focus is on the past 17-18 season. We will try to predict based on prior par
 
 ## Processing Data
 
-We made two tables A and B to store the standing data of all teams (in A) and the match data of each matches (in B). 
+### Raw Data
 
-Then use the "current" standing data in A to simulate upcoming matches in B and use the following match data to regenerate new standing data in A
-
-```{r, fig.align="center",echo=FALSE}
-knitr::include_graphics("methods_flowchart.png")
-```
-
-Raw data used:
+Raw datasets we used in our project are "2017-18_standing.csv" and "2017-18_teamBoxScore.csv", whose details are showed below:
 ```{r,echo=FALSE}
 standing_data=read.csv("2017-18_standings.csv")
 match_data=read.csv("2017-18_teamBoxScore.csv")
@@ -76,6 +70,74 @@ From 2017-18_teamBoxScore.csv
 ```{r}
 str(match_data[,c(1,10,11,13,14,17,73)])
 ```
+
+### Processing data to fit models
+
+```{r, echo = FALSE, cache = TRUE}
+data_standings = read.csv("2017-18_standings.csv")
+data_boxscore = read.csv("2017-18_teamBoxScore.csv")
+data_boxscore_total = read.csv("nba-enhanced-stats/2012-18_teamBoxScore.csv")
+team_level = data_standings$teamAbbr[1:30]
+
+data_hist = matrix(NA, 900, 5)
+data_hist = as.data.frame(data_hist)
+colnames(data_hist) = c("team1", "team2", "hist_win", "hist_lost", "hist_rate")
+
+for (i in 1:30) {
+  for (j in 1:30) {
+    if (i != j) {
+      data_hist[(i-1)*30 + j, 1] = as.character(team_level[i])
+      data_hist[(i-1)*30 + j, 2] = as.character(team_level[j])
+      totalResult1 = data_boxscore_total$teamRslt[which((data_boxscore_total$teamAbbr == team_level[i]) & (data_boxscore_total$opptAbbr == team_level[j]))]
+      totalResult2 = data_boxscore_total$teamRslt[which((data_boxscore_total$teamAbbr == team_level[j]) & (data_boxscore_total$opptAbbr == team_level[i]))]
+      totalGame = length(totalResult1) + length(totalResult2)
+      totalWin = sum(as.numeric(totalResult1) - 1) + (length(totalResult2) - sum(as.numeric(totalResult2) - 1))
+      totalLose = sum(as.numeric(totalResult2) - 1) + (length(totalResult1) - sum(as.numeric(totalResult1) - 1))
+      data_hist[(i-1)*30 + j, 3] = totalWin
+      data_hist[(i-1)*30 + j, 4] = totalLose
+      data_hist[(i-1)*30 + j, 5] = totalWin / totalGame
+    }
+  }
+}
+
+data_hist = data_hist[!is.na(data_hist$team1),]
+
+startMatchfit = min(which(data_boxscore$gmDate == "2017-12-01"))
+endMatchfit = max(which(data_boxscore$gmDate == "2018-03-11"))
+
+data_fit = as.data.frame(matrix(NA, endMatchfit - startMatchfit + 1, 9))
+data_fit[,1] = data_boxscore$gmDate[startMatchfit:endMatchfit]
+data_fit[,2] = data_boxscore$teamAbbr[startMatchfit:endMatchfit]
+data_fit[,3] = data_boxscore$opptAbbr[startMatchfit:endMatchfit]
+for (i in 1:nrow(data_fit)) {
+  data_fit[i,4] = data_standings$homeWin[which(data_standings$stDate == data_fit[i,1] & data_standings$teamAbbr == data_fit[i, 2])] / 
+    (data_standings$homeLoss[which(data_standings$stDate == data_fit[i,1] & data_standings$teamAbbr == data_fit[i, 2])] +
+       data_standings$homeWin[which(data_standings$stDate == data_fit[i,1] & data_standings$teamAbbr == data_fit[i, 2])])
+  data_fit[i,5] = data_standings$homeWin[which(data_standings$stDate == data_fit[i,1] & data_standings$teamAbbr == data_fit[i, 3])] / 
+    (data_standings$homeLoss[which(data_standings$stDate == data_fit[i,1] & data_standings$teamAbbr == data_fit[i, 3])] +
+       data_standings$homeWin[which(data_standings$stDate == data_fit[i,1] & data_standings$teamAbbr == data_fit[i, 3])])
+  data_fit[i,6] = data_standings$lastTen[which(data_standings$stDate == data_fit[i,1] & data_standings$teamAbbr == data_fit[i, 2])] / 10
+  data_fit[i,7] = data_standings$lastTen[which(data_standings$stDate == data_fit[i,1] & data_standings$teamAbbr == data_fit[i, 3])] / 10
+  data_fit[i,8] = data_hist$hist_rate[which(data_hist$team1 == as.character(data_fit[i,2]) & data_hist$team2 == as.character(data_fit[i, 3]))]
+}
+colnames(data_fit) = c("gmDate", "homeTeam", "awayTeam", "homeTeamRate", "awayTeamRate", "homeTeamlast10", "awayTeamlast10", "histRate", "Result")
+data_fit[,9] = data_boxscore$teamRslt[startMatchfit:endMatchfit]
+#data_fit[,4] = as.numeric(data_fit[,4]) - 1
+glm1 = glm(Result ~ homeTeamRate + awayTeamRate + homeTeamlast10 + awayTeamlast10 + histRate, family = binomial, data = data_fit)
+```
+
+In our project, we used actual match result from *2017-12-01* to *2018-03-11* to fit a model, and used this model to predict match result from *2018-03-12* to the end of NBA 2017-18 regular season. 
+
+### Processing table_a and table_b
+
+Since for simulation part, we have to update the teams' standing after each simulation and use updated data to simulate next match result. We decided to made two tables A and B to store the standing data of all teams (in A) and the match data of each matches (in B). Then use the "current" standing data in A to simulate upcoming matches in B and use the following match data to regenerate new standing data in A.
+
+The following chart about how we use table_a and table_b is showed below (detailed information will be shown in *Simulation* part):
+
+```{r, fig.align="center",echo=FALSE}
+knitr::include_graphics("methods_flowchart.png")
+```
+
 ```{r,echo=FALSE}
 creattablea = function(standing,match,today){
   standing=standing_data[standing_data$stDate==today,]
@@ -142,7 +204,9 @@ creattablea = function(standing,match,today){
 tablea180311=creattablea(standing_data,match_data,"2018-03-11")
 
 ```
-Initial table A:
+Basic information about table_a and table_b are as follows:
+
+**Initial table_a:**
 ```{r}
 str(tablea180311)
 ```
@@ -166,6 +230,38 @@ Columns’ meaning:
 * "Awaymatch": number of matches played away
 * "l1" ~ "l10": is the last 1~10 win or lose
 
+**Initial table_b:**
+```{r, echo = FALSE, cache = TRUE}
+data_boxscore = data_boxscore[data_boxscore$teamLoc == "Home",]
+endMatch = max(which(data_boxscore$gmDate == "2018-04-11"))
+startMatch = min(which(data_boxscore$gmDate == "2018-03-12"))
+data_B = as.data.frame(matrix(NA, (endMatch - startMatch + 1), 56))
+colnames(data_B) = c("gmDate", "HomeTeam(A)", "AwayTeam(B)", "SameConf", "HistData", 
+                    "confname_A", "homerate_A", "awayrate_A", "last10_A", "homescorewin_A", "homescorelost_A", "awayscorewin_A", "awayscorelost_A",  "confrate_A", "numberdayoff_A", "lastgame_A", "totalmatch_A", "confmatch_A",
+                    "homematch_A", "awaymatch_A", "l1_A", "l2_A", "l3_A", "l4_A", "l5_A", "l6_A", "l7_A", "l8_A", "l9_A", "l10_A", 
+                    "confname_B", "homerate_B", "awayrate_B", "last10_B", "homescorewin_B", "homescorelost_B", "awayscorewin_B", "awayscorelost_B",  "confrate_B", "numberdayoff_B", "lastgame_B", "totalmatch_B", "confmatch_B", 
+                    "homematch_B", "awaymatch_B", "l1_B", "l2_B", "l3_B", "l4_B", "l5_B", "l6_B", "l7_B", "l8_B", "l9_B", "l10_B","result")
+data_B[, 1] = data_boxscore$gmDate[startMatch:endMatch]
+data_B[, 2] = data_boxscore$teamAbbr[startMatch:endMatch]
+data_B[, 3] = data_boxscore$opptAbbr[startMatch:endMatch]
+data_B[, 4] = (data_boxscore$teamConf == data_boxscore$opptConf)[startMatch:endMatch]
+for (i in 1:nrow(data_B)) {
+  data_B[i, 5] = data_hist$hist_rate[which(data_hist$team1 == as.character(data_B[i,2]) & data_hist$team2 == as.character(data_B[i,3]))]
+}
+```
+
+```{r}
+str(data_B[,c(1,2,3,4,5,56)])
+```
+Columns’ meaning:
+
+* "gmDate": Game date
+* "Hometeam(A)": The Abbreviation of team A (played as home team)
+* "Awayteam(B)": The Abbreviation of team B (played as away team)
+* "SameConf": True if two teams are in the same conference, false if not
+* "HistData": The historical rate for team A played with team B
+* "result": The match result based on our simulation
+* The rest of columns are the data that is contained in table_a describing conditions for both team A and team B 
 
 ## Generalized Linear Regression
 
@@ -205,7 +301,7 @@ According to the plots, *Home Rate vs. Home Last 10*, *Away Rate vs. Away Last 1
 
 # Results
 
-## Linear Regrssion 
+## Linear Regrssion
 
 ## Permutation Test
 
@@ -227,6 +323,12 @@ By performing permutation tests, we obtained the following table, which shows al
 We found that all pairs of variables have correlation except *Home Rate vs. Away Rate*. This observation suggests that there exists problem of collinearity among the predictors. It leads us to further examine the VIF (Variance Inflation Factor) of the predictors and fit a Ridge Regression model to remedy the problem of collinearity. 
 
 ## Ridge Regression 
+
+## Simulation
+
+```{r, echo = TRUE, cache = FALSE}
+```
+
 
 # Discussion
 The test for correlation is not very accurate because the "Last 10" data (i.e. `homeTeamlast10` and `awayTeamlast10`) are highly categorical (discrete) because based on their calculation criteria: the number of times the team wins, which is an integer, divided by 10. When the "Last 10" data is paired with the other continuous variables, such as `homeTeamRate` and `histRate`, the correlation between a continuous variable and a somewhat discrete variable cannot be simply determined by correlation coefficients.

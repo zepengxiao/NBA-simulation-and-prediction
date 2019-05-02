@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2019.1.30)  2 MAY 2019 20:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2019.1.30)  2 MAY 2019 21:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -997,7 +997,7 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 146.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-) <eastandwest.jpg, id=73, 299.1175pt x 451.6875pt>
+) <eastandwest.jpg, id=85, 299.1175pt x 451.6875pt>
 File: eastandwest.jpg Graphic file (type jpg)
 <use eastandwest.jpg>
 Package pdftex.def Info: eastandwest.jpg used on input line 155.
@@ -1027,105 +1027,122 @@ Overfull \hbox (20.28117pt too wide) detected at line 184
 \OML/lmm/m/it/10 TeamB[]sgamesbehind \OT1/lmr/m/n/10 = []
  []
 
-[2 <./eastandwest.jpg>] <methods_flowchart.png, id=87, 312.16624pt x 412.54124p
-t>
-File: methods_flowchart.png Graphic file (type png)
-<use methods_flowchart.png>
-Package pdftex.def Info: methods_flowchart.png used on input line 215.
-(pdftex.def)             Requested size: 312.17024pt x 412.54652pt.
-[3 <./methods_flowchart.png>]
-LaTeX Font Info:    Try loading font information for T1+lmtt on input line 222.
+[2 <./eastandwest.jpg>]
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 217.
 
 (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 223.
-LaTeX Font Info:    Try loading font information for TS1+lmtt on input line 239
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 218.
+LaTeX Font Info:    Try loading font information for TS1+lmtt on input line 234
 .
 (/usr/share/texmf/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 239--239
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 234--234
 []\T1/lmtt/m/n/10 ##  $ stDate  : Factor w/ 168 levels "2017-10-17","2017-10-18
 ",..: 1 1 1 1 1 1 1 1 1 1 ...[] 
  []
 
 
-Overfull \hbox (2.7436pt too wide) in paragraph at lines 258--258
+Overfull \hbox (2.7436pt too wide) in paragraph at lines 253--253
 []\T1/lmtt/m/n/10 ##  $ gmDate  : Factor w/ 168 levels "2017-10-17","2017-10-18
 ",..: 1 1 1 1 2 2 2 2 2 2 ...[] 
  []
 
-[4] [5] [6] [7]
+[3] <methods_flowchart.png, id=111, 312.16624pt x 412.54124pt>
+File: methods_flowchart.png Graphic file (type png)
+<use methods_flowchart.png>
+Package pdftex.def Info: methods_flowchart.png used on input line 275.
+(pdftex.def)             Requested size: 312.17024pt x 412.54652pt.
+[4 <./methods_flowchart.png>]
+Overfull \hbox (123.49326pt too wide) in paragraph at lines 375--375
+[]\T1/lmtt/m/n/10 ##  $ gmDate     : Factor w/ 168 levels "2017-10-17","2017-10
+-18",..: 139 139 139 139 140 140 140 140 140 140 ...[] 
+ []
+
+
+Overfull \hbox (7.99359pt too wide) in paragraph at lines 375--375
+[]\T1/lmtt/m/n/10 ##  $ HomeTeam(A): Factor w/ 30 levels "ATL","BKN","BOS",..: 
+11 15 21 25 23 30 1 2 20 5 ...[] 
+ []
+
+
+Overfull \hbox (18.49356pt too wide) in paragraph at lines 375--375
+[]\T1/lmtt/m/n/10 ##  $ AwayTeam(B): Factor w/ 30 levels "ATL","BKN","BOS",..: 
+26 17 27 16 12 18 21 28 7 13 ...[] 
+ []
+
+[5] [6] [7]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 505.
+(hyperref)                than one, level fixed on input line 564.
 
 
-<group6_written_report_files/figure-latex/unnamed-chunk-8-1.pdf, id=132, 445.66
-5pt x 306.14375pt>
-File: group6_written_report_files/figure-latex/unnamed-chunk-8-1.pdf Graphic fi
-le (type pdf)
-<use group6_written_report_files/figure-latex/unnamed-chunk-8-1.pdf>
+<group6_written_report_files/figure-latex/unnamed-chunk-11-1.pdf, id=147, 445.6
+65pt x 306.14375pt>
+File: group6_written_report_files/figure-latex/unnamed-chunk-11-1.pdf Graphic f
+ile (type pdf)
+<use group6_written_report_files/figure-latex/unnamed-chunk-11-1.pdf>
 Package pdftex.def Info: group6_written_report_files/figure-latex/unnamed-chunk
--8-1.pdf used on input line 507.
+-11-1.pdf used on input line 566.
 (pdftex.def)             Requested size: 445.6707pt x 306.14766pt.
 
-<group6_written_report_files/figure-latex/unnamed-chunk-8-2.pdf, id=133, 452.69
-125pt x 293.095pt>
-File: group6_written_report_files/figure-latex/unnamed-chunk-8-2.pdf Graphic fi
-le (type pdf)
-<use group6_written_report_files/figure-latex/unnamed-chunk-8-2.pdf>
+<group6_written_report_files/figure-latex/unnamed-chunk-11-2.pdf, id=148, 452.6
+9125pt x 293.095pt>
+File: group6_written_report_files/figure-latex/unnamed-chunk-11-2.pdf Graphic f
+ile (type pdf)
+<use group6_written_report_files/figure-latex/unnamed-chunk-11-2.pdf>
 Package pdftex.def Info: group6_written_report_files/figure-latex/unnamed-chunk
--8-2.pdf used on input line 508.
+-11-2.pdf used on input line 567.
 (pdftex.def)             Requested size: 452.69014pt x 293.09427pt.
 
-<group6_written_report_files/figure-latex/unnamed-chunk-8-3.pdf, id=134, 442.65
-375pt x 143.53625pt>
-File: group6_written_report_files/figure-latex/unnamed-chunk-8-3.pdf Graphic fi
-le (type pdf)
-<use group6_written_report_files/figure-latex/unnamed-chunk-8-3.pdf>
+<group6_written_report_files/figure-latex/unnamed-chunk-11-3.pdf, id=149, 442.6
+5375pt x 143.53625pt>
+File: group6_written_report_files/figure-latex/unnamed-chunk-11-3.pdf Graphic f
+ile (type pdf)
+<use group6_written_report_files/figure-latex/unnamed-chunk-11-3.pdf>
 Package pdftex.def Info: group6_written_report_files/figure-latex/unnamed-chunk
--8-3.pdf used on input line 509.
+-11-3.pdf used on input line 568.
 (pdftex.def)             Requested size: 442.66615pt x 143.54027pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 507--510
+Underfull \hbox (badness 10000) in paragraph at lines 566--569
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 507--510
+Underfull \hbox (badness 10000) in paragraph at lines 566--569
 []
  []
 
 [8]
 Overfull \vbox (3.11723pt too high) has occurred while \output is active []
 
-[9 <./group6_written_report_files/figure-latex/unnamed-chunk-8-1.pdf> <./group6
-_written_report_files/figure-latex/unnamed-chunk-8-2.pdf>]
-Overfull \vbox (2.03923pt too high) detected at line 556
+[9 <./group6_written_report_files/figure-latex/unnamed-chunk-11-1.pdf> <./group
+6_written_report_files/figure-latex/unnamed-chunk-11-2.pdf>]
+Overfull \vbox (2.03923pt too high) detected at line 615
  []
 
-[10 <./group6_written_report_files/figure-latex/unnamed-chunk-8-3.pdf>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 559.
+[10 <./group6_written_report_files/figure-latex/unnamed-chunk-11-3.pdf>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 618.
 [11]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 559.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 618.
 (./group6_written_report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 559.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 559.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 618.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 618.
 Package rerunfilecheck Info: File `group6_written_report.out' has not changed.
-(rerunfilecheck)             Checksum: 6701D1BFCDAE90A336BED803BBE3868E;2089.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 559.
+(rerunfilecheck)             Checksum: 17D101E290CF2A0236E14837C7F017EF;2625.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 618.
  ) 
 Here is how much of TeX's memory you used:
- 13049 strings out of 494944
- 188948 string characters out of 6180677
- 293181 words of memory out of 5000000
- 16043 multiletter control sequences out of 15000+600000
- 53474 words of font info for 75 fonts, out of 8000000 for 9000
+ 13063 strings out of 494944
+ 189196 string characters out of 6180677
+ 293323 words of memory out of 5000000
+ 16049 multiletter control sequences out of 15000+600000
+ 53557 words of font info for 76 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 31i,6n,35p,398b,451s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 31i,5n,35p,398b,451s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
 ips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share
 /texmf/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ma
@@ -1139,10 +1156,10 @@ texmf/fonts/type1/public/lm/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/
 lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy7.pfb></usr/share/texmf/
 fonts/type1/public/lm/lmtk10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10
 .pfb></usr/share/texmf/fonts/type1/public/lm/lmtti10.pfb>
-Output written on group6_written_report.pdf (11 pages, 743064 bytes).
+Output written on group6_written_report.pdf (11 pages, 746421 bytes).
 PDF statistics:
- 250 PDF objects out of 1000 (max. 8388607)
- 207 compressed objects within 3 object streams
- 47 named destinations out of 1000 (max. 500000)
- 10386 words of extra memory for PDF output out of 12000 (max. 10000000)
+ 266 PDF objects out of 1000 (max. 8388607)
+ 223 compressed objects within 3 object streams
+ 53 named destinations out of 1000 (max. 500000)
+ 10410 words of extra memory for PDF output out of 12000 (max. 10000000)
 
