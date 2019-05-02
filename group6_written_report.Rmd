@@ -391,8 +391,8 @@ The test for correlation is not very accurate because the "Last 10" data (i.e. `
 
 Our prediction, in comparing to the real final standing by the end of season 17-18, get 100% success in predicting the 8 Eastern teams entering the playoffs while 6 out of 8 teams correct in the West conference: 
 
-DEN and LAC did not get into the playoffs
-NO and SA took their places instead.
+* DEN and LAC did not get into the playoffs
+* NO and SA took their places instead.
 
 Apart from improvements could make in our data processing, we found that unpredictable injury and tradings, which we have not considered in our model, may have strongly affected the real final result. The possible factors include:
 
