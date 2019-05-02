@@ -1,5 +1,6 @@
 ---
-title: "STAT 428 Group 6 Written Report"
+title: |
+  | \vspace{7cm} \LARGE{STAT428 Group6 Project Written Report}
 author:
 - Zepeng Xiao, zepengx2
 - Shuogong, shuog2
@@ -8,10 +9,6 @@ author:
 - Sixin Ma, sixinma2
 date: "April 28, 2019"
 subtitle: Simulating NBA Match Results and Predicting NBA Playoff Teams
-abstract: "| The main purpose of our project is simulating match results and predicting
-  \n| NBA playoff teams for season 2017-18 based on this season's real data, and\n|
-  comparing our results with this season's real data to calculate our method's\n|
-  accuracy.\n"
 output: pdf_document
 ---
 
@@ -20,6 +17,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 \pagebreak
+
+# Abstract 
+
+The main purpose of our project is simulating match results and predicting NBA playoff teams for season 2017-18 based on this season's real data, and comparing our results with this season's real data to calculate our method's accuracy.
 
 # Introduction
 
@@ -50,11 +51,13 @@ The focus is on the past 17-18 season. We will try to predict based on prior par
 
 # Methods
 
+## Processing Data
+
 ## Generalized Linear Regression
 
 ## Permutation Test
 
-The linear model we used to predict the game result includes predictors that might be correlated to each other. For example, `homeTeamRate` and `homeTeamlast10` seem to be positively correlated in common sense. Therefore, to improve our regression fit, we want to thorougly examine the correlations among the variables and proceed to use ridge regression if the variables are confirmed to be correlated. The variables for testing are,
+The generalized linear model we used to predict the game result includes predictors that might be correlated to each other. For example, `homeTeamRate` and `homeTeamlast10` seem to be positively correlated in common sense. Therefore, to improve our regression fit, we want to thorougly examine the correlations among the variables and proceed to use ridge regression if the variables are confirmed to be correlated. The variables for testing are,
 
 - `homeTeamRate`
 - `awayTeamRate`
