@@ -383,6 +383,25 @@ We found that all pairs of variables have correlation except *Home Rate vs. Away
 The test for correlation is not very accurate because the "Last 10" data (i.e. `homeTeamlast10` and `awayTeamlast10`) are highly categorical (discrete) because based on their calculation criteria: the number of times the team wins, which is an integer, divided by 10. When the "Last 10" data is paired with the other continuous variables, such as `homeTeamRate` and `histRate`, the correlation between a continuous variable and a somewhat discrete variable cannot be simply determined by correlation coefficients.
 
 
+##For the permutation test  part:
+  we use the Pearson correlation and Spearman correlation two methods to calculate the correlation between two variables. But that may be not enough and accurate. We can use more methods to calculate correlations according to different variable kinds. 
+
+
+## For the result itself:
+
+Our prediction, in comparing to the real final standing by the end of season 17-18, get 100% success in predicting the 8 Eastern teams entering the playoffs while 6 out of 8 teams correct in the West conference: 
+
+DEN and LAC did not get into the playoffs
+NO and SA took their places instead.
+
+Apart from improvements could make in our data processing, we found that unpredictable injury and tradings, which we have not considered in our model, may have strongly affected the real final result. The possible factors include:
+
+1, DEN’s main point guard Harris was claimed to be injured on March 18, when is almost the end of the regular season.
+2, DEN’s main power forward Millsap rejoin the team in the mid-season and not perform well during the first several months after he rejoins.
+3, LAC traded its main power forward Griffin in the mid-season, gave up their fighting for the playoff and started the team’s rebuilt.
+4, The 4th to 10th teams in the West are very competitive with each other. Their win rates are only 2% different at most.
+
+
 <!-- Force a new page for appendix -->
 \newpage
 
