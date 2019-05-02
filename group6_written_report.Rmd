@@ -20,7 +20,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Abstract 
 
-The main purpose of our project is simulating match results and predicting NBA playoff teams for season 2017-18 based on this season's real data, and comparing our results with this season's real data to calculate our method's accuracy. The method we used in our project includes **Random number generations**, **Permutation test** and **Ridge regression**. We found that the accuracy of our prediction of playoff teams for season 2017-18 is $87.5%(14/16)$ when comapring the actual result.
+The main purpose of our project is simulating match results and predicting NBA playoff teams for season 2017-18 based on this season's real data, and comparing our results with this season's real data to calculate our method's accuracy, since analyzing and predictiong NBA stats is popular currently. The method we used in our project includes **Random number generations**, **Permutation test** and **Ridge regression**. 
+
+We found that regarding the playoff teams for season 2017-18, the accuracy of our prediction is $87.5 \% \ (14/16)$ when comapring the actual result. The result can be regarded as accurate beacuse we used each team's former performance in this season to make predictions, which is reliable. But there are still some conditions that were not included in the model, like player's injury, team's stamina and so on.
 
 # Introduction
 
@@ -157,7 +159,7 @@ Columns’ meaning:
 * "confmatch":number of matches played within conference
 * "Homematch": number of matches played at home
 * "Awaymatch": number of matches played away
-* "L1" ~ "l10": is the last 1~10 win or lose
+* "l1" ~ "l10": is the last 1~10 win or lose
 
 
 ## Generalized Linear Regression
