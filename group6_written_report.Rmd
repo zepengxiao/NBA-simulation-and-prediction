@@ -62,12 +62,12 @@ standing_data=read.csv("2017-18_standings.csv")
 match_data=read.csv("2017-18_teamBoxScore.csv")
 ```
 From 2017-18_standing.csv
-```{r}
-str(standing_data[,c(1,2,13,14,15,16,17,18,20,21)])
+```{r, echo = FALSE}
+head(standing_data[,c(1,2,13,14,15,16,17,18,20,21)], 3)
 ```
 From 2017-18_teamBoxScore.csv
-```{r}
-str(match_data[,c(1,10,11,13,14,17,73)])
+```{r, echo = FALSE}
+head(match_data[,c(1,10,11,13,14,17,73)], 3)
 ```
 
 ### Processing data to fit models
@@ -295,23 +295,10 @@ summary(glm1)
 glmcoe = glm1$coefficients
 ```
 Hence our generalized model is: 
-$$p(Y_{AB}) = \frac{exp^{`r glmcoe[1]` + (`r glmcoe[2]`X_{AB1}) + (`r glmcoe[3]`X_{AB2}) + (`r glmcoe[4]`X_{AB3}) + (`r glmcoe[5]`X_{AB4}) + (`r glmcoe[6]`X_{AB5})}}{1 + exp^{`r glmcoe[1]` + (`r glmcoe[2]`X_{AB1}) + (`r glmcoe[3]`X_{AB2}) + (`r glmcoe[4]`X_{AB3}) + (`r glmcoe[5]`X_{AB4}) + (`r glmcoe[6]`X_{AB5})}}$$
+$$p(Y_{AB}) = \frac{e^{`r glmcoe[1]` + (`r glmcoe[2]`X_{AB1}) + (`r glmcoe[3]`X_{AB2}) + (`r glmcoe[4]`X_{AB3}) + (`r glmcoe[5]`X_{AB4}) + (`r glmcoe[6]`X_{AB5})}}{1 + e^{`r glmcoe[1]` + (`r glmcoe[2]`X_{AB1}) + (`r glmcoe[3]`X_{AB2}) + (`r glmcoe[4]`X_{AB3}) + (`r glmcoe[5]`X_{AB4}) + (`r glmcoe[6]`X_{AB5})}}$$
 where $X_{AB1}$ is homeTeamRate, $X_{AB2}$ is awayTeamRate, $X_{AB3}$ is homeTeamlast10, $X_{AB4}$ is awayTeamlast10 and $X_{AB5}$ is histRate.
 
 Though all predictors seem significant($\text{p-value} < 0.05$) in our generalized linear model, we still need to check if collinearity exists between some predictors. So we turn to permutation test for checking.
-
-## Simulation Process
-
-We simulate the match results and predict playoff teams for 1000 times, using the ridge regression model above. Given table A and table B data, we could write our simulation process algorithm as below:
-
-1. Create two $1000\times8$ empty data frame, `sim_record_East` and `sim_record_West` to store top 8 eastern team and western team names for 1000 simulations. Also, create a $30\times10$ data frame `sim_record_number`, whose column names are `"teamname", "confname", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"`, to accumulately record how many times each team enters the top 8 after 1000 simulations. And columns from `1st` to `8th` are all initialized with zeros.
-2. For each game match (each row is one game match) in table B:
-    - Update standing data (columns from `confname_A` to `l10_B` in game match row) from the corresponding rows in table A.
-    - Use updated game match data and our ridge regression model to predict the home team win probability. Using our ridge regression model, we could get  `predictStat`, and `threshold = exp(predictStat) / (1 + exp(predictStat))`. Then randomly generate one number from `runif(1)` and compare it with `threshold`. Home team wins if the number generated is less than `threshold`, and vice versa.
-    - Once we get the predicted match result, we use it to update the corresponding data in table A, including `homerate`, `awayrate`, `last10`, etc.
-3. After predicting all game matches' results, we push the eastern and western top 8 team names into `sim_record_East` and `sim_record_West`, also we add these 16 teams' counters by one in `sim_record_number`. 
-4. Repeat step 2, 3 for 1000 times.
-5. Finally, we could get `sim_record_number` after 1000 times simulation. And for our final prediction, we could count total scores for all teams. Let $$Total\ score = Times\ of\ 1^{st} \times 8+\ times\ of\ 2^{nd} \times 7+...+\ times\ of\ 8^{th} \times 1$$. We could get the rankings in order of total scores from largest to smallest. And the top 8 western and eastern teams are what we finally want.
 
 ## Permutation Test
 
@@ -340,19 +327,25 @@ In our case, we can inherit the idea of permutation test and adapt it to paired 
 
 To determine which correlation coefficient to use for which pair of comparison, we plot variables against each another and added some noise using `jitter()` to visualize the trend of relationship and decide which method to use.
 
+```{r, echo = FALSE}
+data = read.csv("data_fit.csv")
+# Scatterplots for Correlation
+par(mfrow = c(2,2))
+plot(data$homeTeamRate, jitter(data$homeTeamlast10, 3), main = "Home Rate vs. Home Last 10")
+plot(data$awayTeamRate, jitter(data$awayTeamlast10, 3), main = "Away Rate vs. Away Last 10")
+plot(data$homeTeamRate, data$histRate, main = "Home Rate vs. Historical Rate")
+plot(data$awayTeamRate, data$histRate, main = "Away Rate vs. Historical Rate")
+par(mfrow = c(2,2))
+plot(jitter(data$homeTeamlast10, 3), data$histRate, main = "Home Last 10 vs. Historical Rate")
+plot(jitter(data$awayTeamlast10, 3), data$histRate, main = "Away Last 10 vs. Historical Rate")
+plot(data$homeTeamRate, data$awayTeamRate, main = "Home Rate vs. Away Rate")
+plot(jitter(data$homeTeamlast10, 3), jitter(data$awayTeamlast10, 3), main = "Home Last 10 vs. Away Last 10")
+par(mfrow = c(2,2))
+plot(data$homeTeamRate, jitter(data$awayTeamlast10, 3), main = "Home Rate vs. Away Last 10")
+plot(data$awayTeamRate, jitter(data$homeTeamlast10, 3), main = "Away Rate vs. Home Last 10")
+```
+
 According to the plots, *Home Rate vs. Home Last 10*, *Away Rate vs. Away Last 10*, *Home Last 10 vs. Historical Rate*, and *Away Last 10 vs. Historical Rate* appear to be linear. We use the Pearson method for these pairs. For the rest pairs, trends are not that obvious. Therefore, we use the more genearl Spearman method.
-
-## Ridge Regression 
-
-
-# Results
-
-## Linear Regrssion
-
-
-
-
-## Permutation Test
 
 By performing permutation tests, we obtained the following table, which shows all the pairs we tested, the method we used, the p-value for the permutation test, and the decisions based on the p-values. 
 
@@ -373,6 +366,34 @@ We found that all pairs of variables have correlation except *Home Rate vs. Away
 
 ## Ridge Regression 
 
+
+
+## Simulation Process
+
+We repeatedly predicted playoff teams 1000 times by simulating match results with the ridge regression model above. Given table A and table B data, we could write our simulation process algorithm as below:
+
+1. Create two $1000\times8$ empty data frame, `sim_record_East` and `sim_record_West` to store top 8 eastern team and western team names for 1000 simulations. Also, create a $30\times10$ data frame `sim_record_number`, whose column names are `"teamname", "confname", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"`, to accumulately record how many times each team enters the top 8 after 1000 simulations. And columns from `1st` to `8th` are all initialized with zeros.
+1. For each game match (each row is one game match) in table B:
+    - Update standing data (columns from `confname_A` to `l10_B` in game match row) from the corresponding rows in table A.
+    - Use updated game match data and our ridge regression model to predict the home team win probability. Using our ridge regression model, we could get  `predictStat`, and `threshold = exp(predictStat) / (1 + exp(predictStat))`. Then randomly generate one number from `runif(1)` and compare it with `threshold`. Home team wins if the number generated is less than `threshold`, and vice versa.
+    - Once we get the predicted match result, we use it to update the corresponding data in table A, including `homerate`, `awayrate`, `last10`, etc.
+1. After predicting all game matches' results, we push the eastern and western top 8 team names into `sim_record_East` and `sim_record_West`, also we add these 16 teams' counters by one in `sim_record_number`. 
+1. Repeat step 2, 3 for 1000 times.
+1. Finally, we could get `sim_record_number` after 1000 times simulation. And for our final prediction, we could count total scores for all teams. Let $$Total\ score = Times\ of\ 1^{st} \times 8+\ times\ of\ 2^{nd} \times 7+...+\ times\ of\ 8^{th} \times 1$$. We could get the rankings in order of total scores from largest to smallest. And the top 8 western and eastern teams are what we finally want.
+
+Code for making simulations can be found below in **Appendix**.
+
+# Results
+
+## Linear Regrssion
+
+
+
+
+## Permutation Test
+
+## Ridge Regression 
+
 ## Simulation
 
 ```{r, echo = TRUE, cache = FALSE}
@@ -390,7 +411,7 @@ The test for correlation is not very accurate because the "Last 10" data (i.e. `
 
 ### Scatterplots for Correlation
 
-```{r, echo = FALSE}
+```{r, eval = FALSE}
 data = read.csv("data_fit.csv")
 
 par(mfrow = c(2,2))
@@ -402,7 +423,8 @@ par(mfrow = c(2,2))
 plot(jitter(data$homeTeamlast10, 3), data$histRate, main = "Home Last 10 vs. Historical Rate")
 plot(jitter(data$awayTeamlast10, 3), data$histRate, main = "Away Last 10 vs. Historical Rate")
 plot(data$homeTeamRate, data$awayTeamRate, main = "Home Rate vs. Away Rate")
-plot(jitter(data$homeTeamlast10, 3), jitter(data$awayTeamlast10, 3), main = "Home Last 10 vs. Away Last 10")
+plot(jitter(data$homeTeamlast10, 3), jitter(data$awayTeamlast10, 3), 
+     main = "Home Last 10 vs. Away Last 10")
 par(mfrow = c(2,2))
 plot(data$homeTeamRate, jitter(data$awayTeamlast10, 3), main = "Home Rate vs. Away Last 10")
 plot(data$awayTeamRate, jitter(data$homeTeamlast10, 3), main = "Away Rate vs. Home Last 10")
@@ -449,3 +471,126 @@ perm_test(data$homeTeamlast10, data$awayTeamlast10, 10000, "spearman")
 perm_test(data$homeTeamRate, data$awayTeamlast10, 10000, "spearman")
 perm_test(data$awayTeamRate, data$homeTeamlast10, 10000, "spearman")
 ```
+
+### Simulations
+```{r, eval = FALSE}
+totalNRows = nrow(data_B)
+set.seed(665267179)
+
+sim_record_East = as.data.frame(matrix(NA, 1000, 8))
+colnames(sim_record_East) = c("1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th")
+sim_record_West = as.data.frame(matrix(NA, 1000, 8))
+colnames(sim_record_West) = c("1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th")
+sim_record_number = as.data.frame(matrix(0, 30, 10))
+colnames(sim_record_number) = c("teamname", "confname", 
+                                "1st", "2nd", "3rd", "4th", 
+                                "5th", "6th", "7th", "8th")
+sim_record_number$teamname = team_level
+sim_record_number$confname = data_A$confname
+
+# simulating
+sim_time = 1000
+for (i in 1:sim_time) {
+  data_A_copy = data_A
+  data_B_copy = data_B
+  #one-time simulation
+  for (nrowdata_B_copy in 1:totalNRows) {
+    homeTeam = data_B_copy[nrowdata_B_copy, ]$`HomeTeam(A)`
+    awayTeam = data_B_copy[nrowdata_B_copy, ]$`AwayTeam(B)`
+    
+    homeTeamRow = which(data_A_copy$teamname == homeTeam)
+    awayTeamRow = which(data_A_copy$teamname == awayTeam)
+    
+    homeTeamdata_A_copy = data_A_copy[homeTeamRow, 2:26]
+    awayTeamdata_A_copy = data_A_copy[awayTeamRow, 2:26]
+    
+    data_B_copy[nrowdata_B_copy, ][6:30] = data_A_copy[homeTeamRow, ][2:26]
+    data_B_copy[nrowdata_B_copy, ][31:55] = data_A_copy[awayTeamRow, ][2:26]
+    
+    homeTeamRate = homeTeamdata_A_copy[2][[1]]
+    awayTeamRate = awayTeamdata_A_copy[3][[1]]
+    homeTeamlast10 = homeTeamdata_A_copy[4][[1]]
+    awayTeamlast10 = awayTeamdata_A_copy[4][[1]]
+    histRate = data_B_copy[nrowdata_B_copy, ][5][[1]]
+    
+    predictorDataFrame = data.frame(homeTeamRate = homeTeamRate, 
+                                    awayTeamRate = awayTeamRate, 
+                                    homeTeamlast10 = homeTeamlast10,
+                                    awayTeamlast10 = awayTeamlast10, 
+                                    histRate = histRate)
+    
+    #predictStat = predict(glm1, predictorDataFrame)
+    #ridge regression
+    predictStat = predict.glmnet(rr, as.matrix(predictorDataFrame))
+    [which(cv.out$lambda == cv.out$lambda.min)]
+    
+    threshold = exp(predictStat) / (1 + exp(predictStat))
+    if (runif(1) < threshold) {
+      result = 1
+    } else {
+      result = 0
+    }
+    
+    data_B_copy[nrowdata_B_copy, ][56] = result
+    
+    homeRate = data_A_copy[homeTeamRow, ][3][[1]]
+    homeMatch = data_A_copy[homeTeamRow, ][15][[1]]
+    homeWinMatch = round(homeRate * homeMatch, digits=0)
+    data_A_copy[homeTeamRow, ][15] = homeMatch + 1
+    data_A_copy[homeTeamRow, ][3] = (homeWinMatch + result) / (homeMatch + 1)
+    data_A_copy[homeTeamRow, ][18:26] = data_A_copy[homeTeamRow, ][17:25]
+    data_A_copy[homeTeamRow, ][17] = data_B_copy[nrowdata_B_copy, ][56] + 1
+    data_A_copy$last10[homeTeamRow] = sum(data_A_copy[homeTeamRow, 17:26] - 1) / 10
+    
+    
+    awayRate = data_A_copy[awayTeamRow, ][4][[1]]
+    awayMatch = data_A_copy[awayTeamRow, ][16][[1]]
+    awayWinMatch = round(awayRate * awayMatch, digits=0)
+    data_A_copy[awayTeamRow, ][16] = awayMatch + 1
+    data_A_copy[awayTeamRow, ][4] = (awayWinMatch + (1 - result)) / (awayMatch + 1)
+    data_A_copy[awayTeamRow, ][18:26] = data_A_copy[awayTeamRow, ][17:25]
+    if (data_B_copy[nrowdata_B_copy, ][56] == 0) {
+      data_A_copy[awayTeamRow, ][17] = 2
+    } else {
+      data_A_copy[awayTeamRow, ][17] = 1
+    }
+    data_A_copy$last10[awayTeamRow] = sum(data_A_copy[awayTeamRow, 17:26] - 1) / 10
+    data_A_copy$totalmatch[homeTeamRow] = data_A_copy$totalmatch[homeTeamRow] + 1
+    data_A_copy$totalmatch[awayTeamRow] = data_A_copy$totalmatch[awayTeamRow] + 1
+  }
+  
+  # recording result
+  data_A_copy_East = data_A_copy[data_A_copy$confname == "East",]
+  data_A_copy_East = data_A_copy_East[order(
+    -data_A_copy_East$homerate*data_A_copy_East$homematch
+    -data_A_copy_East$awayrate*data_A_copy_East$awaymatch),]
+  sim_record_East[i, ] = data_A_copy_East$teamname[1:8]
+  
+  data_A_copy_West = data_A_copy[data_A_copy$confname == "West",]
+  data_A_copy_West = data_A_copy_West[order(
+    -data_A_copy_West$homerate*data_A_copy_West$homematch
+    -data_A_copy_West$awayrate*data_A_copy_West$awaymatch),] 
+  sim_record_West[i, ] = data_A_copy_West$teamname[1:8]
+  
+  for (rank in 1:8) {
+    sim_record_number[which(sim_record_number$teamname == 
+                              data_A_copy_East$teamname[rank]), rank + 2] = 
+      sim_record_number[which(sim_record_number$teamname == 
+                                data_A_copy_East$teamname[rank]), rank + 2] + 1
+    sim_record_number[which(sim_record_number$teamname == 
+                              data_A_copy_West$teamname[rank]), rank + 2] = 
+      sim_record_number[which(sim_record_number$teamname == 
+                                data_A_copy_West$teamname[rank]), rank + 2] + 1
+  }
+}
+
+sim_record_number$total = rowSums(sim_record_number[,3:10])
+sim_record_number$weightedtotal = sim_record_number$`1st`*8 +
+  sim_record_number$`2nd`*7 + sim_record_number$`3rd`*6 +
+  sim_record_number$`4th`*5 + sim_record_number$`5th`*4 +
+  sim_record_number$`6th`*3 + sim_record_number$`7th`*2 + 
+  sim_record_number$`8th`
+sim_record_number = sim_record_number[order(sim_record_number$confname, 
+                                            -sim_record_number$weightedtotal),]
+```
+
