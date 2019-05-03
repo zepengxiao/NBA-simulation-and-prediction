@@ -3,13 +3,15 @@ title: |
   | \vspace{5cm} \LARGE{STAT428 Group6 Project Written Report}
 author:
 - Zepeng Xiao, zepengx2
-- Shuogong, shuog2
+- Shuo Gong, shuog2
 - Xiaoping Hua, xh3
 - Dongfan Li, dongfan2
 - Sixin Ma, sixinma2
 date: "April 28, 2019"
+output:
+  html_document:
+    df_print: paged
 subtitle: Simulating NBA Match Results and Predicting NBA Playoff Teams
-output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -366,7 +368,32 @@ We found that all pairs of variables have correlation except *Home Rate vs. Away
 
 ## Ridge Regression 
 
+Ridge regression can be applied to significantly reduce prediction variance due to collinearity between predictors. For ridge regression, we have to find $\hat{\beta_{\text{ridge}}}$ to minimize the following function: $$\|y - X\beta\|^2 + \lambda\|\beta\|^2$$
 
+Different $\lambda$ will make our $\hat{\beta_{\text{ridge}}}$ different, so we also have to find the best $\lambda$ to determine our best $\hat{\beta_{\text{ridge}}}$. The code for finding $\lambda$ is showed below:
+```{r, echo = TRUE, eval = FALSE}
+# finding best lambda in ridge regression method
+Y = as.matrix(as.numeric(factor(data_fit$Result)))
+X = as.matrix(data_fit[,-c(9, 1, 2, 3)])
+rr = glmnet(X, Y, family = "binomial", alpha = 0)
+cv.out = cv.glmnet(X, Y, alpha = 0)
+bestlam = cv.out$lambda.min
+
+# we can do the following to get our ridge regression prediction
+predict.glmnet(rr, t(as.matrix(X[1,])))[which(cv.out$lambda == cv.out$lambda.min)]
+```
+
+```{r, echo = FALSE, cache = TRUE, message = FALSE}
+library(glmnet)
+Y = as.matrix(as.numeric(factor(data_fit$Result)))
+X = as.matrix(data_fit[,-c(9, 1, 2, 3)])
+rr = glmnet(X, Y, family = "binomial", alpha = 0)
+cv.out = cv.glmnet(X, Y, alpha = 0)
+bestlam = cv.out$lambda.min
+#plot(cv.out$lambda, cv.out$cvm, type = "l", col = "dodgerblue")
+```
+
+Finally we found that the best lambda in our ridge regression is $`r bestlam`$, so we can use our ridge regression to predict the win probability and simulate the match result for each match.
 
 ## Simulation Process
 
@@ -379,33 +406,57 @@ We repeatedly predicted playoff teams 1000 times by simulating match results wit
     - Once we get the predicted match result, we use it to update the corresponding data in table A, including `homerate`, `awayrate`, `last10`, etc.
 1. After predicting all game matches' results, we push the eastern and western top 8 team names into `sim_record_East` and `sim_record_West`, also we add these 16 teams' counters by one in `sim_record_number`. 
 1. Repeat step 2, 3 for 1000 times.
-1. Finally, we could get `sim_record_number` after 1000 times simulation. And for our final prediction, we could count total scores for all teams. Let $$Total\ score = Times\ of\ 1^{st} \times 8+\ times\ of\ 2^{nd} \times 7+...+\ times\ of\ 8^{th} \times 1$$. We could get the rankings in order of total scores from largest to smallest. And the top 8 western and eastern teams are what we finally want.
+1. Finally, we could get `sim_record_number` after 1000 times simulation. And for our final prediction, we could count total scores for all teams. Let $$Total\ score = times\ of\ 1^{st} \times 8+\ times\ of\ 2^{nd} \times 7+...+\ times\ of\ 8^{th} \times 1$$. We could get the rankings in order of total scores from largest to smallest. And the top 8 western and eastern teams are what we finally want.
 
 Code for making simulations can be found below in **Appendix**.
 
 # Results
 
-## Linear Regrssion
+After doing 1000 simulations, we can plot the times each team finally ranked the top8 in each simulation, with different color representing different rank. The graphs for different conference are showed below and here are some obvious facts:
 
+- For east conference, team **TOR**, **BOS**, **PHI**, **CLE**, **IND**, **MIA** and **MIL** can be in playoff in most of the simulations. Also, team **TOR** and **BOS** are in playoff 1000 times, but the times that team **TOR** ranked the first is greater than team **BOS**.
+- For west conference, team **HOU**, **GS**, **POR** and **UTA** can be in playoff in most of the simulations. Also, team **HOU** and **GS** are in playoff 1000 times, but the times that team **HOU** ranked the first is greater than team **GS**.
 
-
-
-## Permutation Test
-
-## Ridge Regression 
-
-## Simulation
-
-```{r, echo = TRUE, cache = FALSE}
+```{r, echo = FALSE, message = FALSE}
+library("ggplot2")
+library("tidyr")
+data_sim = read.csv("simulation results.csv")
+data_sim = data_sim[,-1]
+colnames(data_sim)[3:10] = c("1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th")
+data_sim2 = gather(data_sim, "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", key = "rank", value = "times")
+data_sim2_west = data_sim2[data_sim2$confname == "West",]
+data_sim2_east = data_sim2[data_sim2$confname == "East",]
+ggplot(data_sim2_east) + aes(x = teamname, y = times, fill = rank) + geom_bar(stat = "identity") + labs(title = "East Conference")
+ggplot(data_sim2_west) + aes(x = teamname, y = times, fill = rank) + geom_bar(stat = "identity") + labs(title = "West Conference")
 ```
 
+\newpage
+
+After calculating the total scores, our final prediction for playoff teams in 2017-18 season with the specific rank is: 
+
+```{r, echo = FALSE}
+library(kableExtra)
+result_table_1 = as.data.frame(matrix(NA, 8, 4))
+rownames(result_table_1) = c("1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th")
+colnames(result_table_1) = c("Predicted_East", "Actual_East", "Predicted_West", "Actual_West")
+Predicted_East = data_sim$teamname[data_sim$confname == "East"]
+result_table_1$Predicted_East = Predicted_East[1:8]
+Predicted_West = data_sim$teamname[data_sim$confname == "West"]
+result_table_1$Predicted_West = Predicted_West[1:8]
+result_table_1$Actual_East = c("TOR", "BOS", "PHI", "CLE", "IND", "MIA", "MIL", "WAS")
+result_table_1$Actual_West = c("HOU", "GS", "POR", "OKC", "UTA", "NO", "SA", "MIN")
+kable(result_table_1) %>% kable_styling(position = "center")
+```
+
+- We found that among all 16 actual playoff teams in 2017-18 season, we correctly predicted 14 teams, so our accuracy is $\frac{14}{16} = 87.5\%$.
+- In addition, when considering the rank for all 16 actual teams, we make correct prediction for 6 Eastern teams and 3 Western teams, which further increase the reliability of our results.
 
 # Discussion
+
+## For the permutation test:
 The test for correlation is not very accurate because the "Last 10" data (i.e. `homeTeamlast10` and `awayTeamlast10`) are highly categorical (discrete) because based on their calculation criteria: the number of times the team wins, which is an integer, divided by 10. When the "Last 10" data is paired with the other continuous variables, such as `homeTeamRate` and `histRate`, the correlation between a continuous variable and a somewhat discrete variable cannot be simply determined by correlation coefficients.
 
-
-##For the permutation test  part:
-  we use the Pearson correlation and Spearman correlation two methods to calculate the correlation between two variables. But that may be not enough and accurate. We can use more methods to calculate correlations according to different variable kinds. 
+we use the Pearson correlation and Spearman correlation two methods to calculate the correlation between two variables. But that may be not enough and accurate. We can use more methods to calculate correlations according to different variable kinds. 
 
 
 ## For the result itself:
@@ -417,10 +468,10 @@ Our prediction, in comparing to the real final standing by the end of season 17-
 
 Apart from improvements could make in our data processing, we found that unpredictable injury and tradings, which we have not considered in our model, may have strongly affected the real final result. The possible factors include:
 
-1, DEN’s main point guard Harris was claimed to be injured on March 18, when is almost the end of the regular season.
-2, DEN’s main power forward Millsap rejoin the team in the mid-season and not perform well during the first several months after he rejoins.
-3, LAC traded its main power forward Griffin in the mid-season, gave up their fighting for the playoff and started the team’s rebuilt.
-4, The 4th to 10th teams in the West are very competitive with each other. Their win rates are only 2% different at most.
+1. DEN’s main point guard Harris was claimed to be injured on March 18, when is almost the end of the regular season.
+1. DEN’s main power forward Millsap rejoin the team in the mid-season and not perform well during the first several months after he rejoins.
+1. LAC traded its main power forward Griffin in the mid-season, gave up their fighting for the playoff and started the team’s rebuilt.
+1. The 4th to 10th teams in the West are very competitive with each other. Their win rates are only 2% different at most.
 
 
 <!-- Force a new page for appendix -->
@@ -611,5 +662,6 @@ sim_record_number$weightedtotal = sim_record_number$`1st`*8 +
   sim_record_number$`8th`
 sim_record_number = sim_record_number[order(sim_record_number$confname, 
                                             -sim_record_number$weightedtotal),]
+write.csv(sim_record_number, "stat428_group6/simulation results.csv")
 ```
 
